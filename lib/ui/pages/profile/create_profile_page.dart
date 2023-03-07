@@ -53,7 +53,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           ? () {
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(builder: (context) {
-                                  return AddresPage();
+                                  return AddresPage(
+                                    myNumber: widget.myNumber,
+                                  );
                                 }),
                                 (route) => false,
                               );

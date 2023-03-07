@@ -33,10 +33,10 @@ class LocationSerchPanalSc extends StatelessWidget {
           SizedBox(
             height: 20.h,
           ),
-          Divider(endIndent: 0, indent: 0, thickness: 2),
+          const Divider(endIndent: 0, indent: 0, thickness: 2),
           SizedBox(height: 8.h),
           ListTile(
-            trailing: Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
             contentPadding: EdgeInsets.zero,
             leading: Icon(
               size: 32.h,
@@ -45,7 +45,7 @@ class LocationSerchPanalSc extends StatelessWidget {
             ),
             title: Text('Joyni aniqlash'.tr()),
           ),
-          Divider(endIndent: 0, indent: 0, thickness: 2),
+          const Divider(endIndent: 0, indent: 0, thickness: 2),
           SizedBox(
             height: 300.h,
             child: ListView.builder(
@@ -67,8 +67,8 @@ class LocationSerchPanalSc extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Icon(Icons.access_time, size: 28.h),
       title: Text('Najot Ta\'lim Qatortol'.tr()),
-      subtitle: Text('Toshkent, Uzbekistan'),
-      trailing: Text('2.5 km'),
+      subtitle: const Text('Toshkent, Uzbekistan'),
+      trailing: const Text('2.5 km'),
     );
   }
 
@@ -80,15 +80,15 @@ class LocationSerchPanalSc extends StatelessWidget {
           color: AppColors.primaryClr,
           size: 30.h,
         ),
-        Spacer(),
+        const Spacer(),
         SizedBox(
           height: 50.h,
           width: 340,
           child: TextFormField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               filled: true,
               // fillColor: const Color(0xFFF0F0F0),
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFFAFAFA)),
                 borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
@@ -109,18 +109,18 @@ class LocationSerchPanalSc extends StatelessWidget {
       children: [
         Icon(
           Icons.adjust,
-          color: Color(0xff4CE5B1),
+          color: const Color(0xff4CE5B1),
           size: 30.h,
         ),
-        Spacer(),
+        const Spacer(),
         SizedBox(
           height: 50.h,
           width: 340,
           child: TextFormField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               filled: true,
               // fillColor: const Color(0xFFF0F0F0),
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFFFAFAFA)),
                 borderRadius: BorderRadius.all(Radius.circular(16)),
               ),

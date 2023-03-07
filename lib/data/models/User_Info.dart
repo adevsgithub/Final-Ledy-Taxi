@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert' show json;
 
 UserInfoModel userInfoModelFromJson(String str) =>
     UserInfoModel.fromJson(json.decode(str));

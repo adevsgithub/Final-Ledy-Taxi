@@ -8,8 +8,8 @@ class LanguageBtmSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 16),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.only(top: 16),
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(
@@ -26,8 +26,9 @@ class LanguageBtmSheet extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
+                Navigator.of(context).pop();
                 context.setLocale(
-                  Locale.fromSubtags(
+                  const Locale.fromSubtags(
                     languageCode: 'ru',
                     countryCode: 'RU',
                   ),
@@ -35,13 +36,14 @@ class LanguageBtmSheet extends StatelessWidget {
               },
               child: SizedBox(
                 height: 56.h,
-                child: Text('Руский'),
+                child: const Text('Руский'),
               ),
             ),
             InkWell(
               onTap: () {
+                Navigator.of(context).pop();
                 context.setLocale(
-                  Locale.fromSubtags(
+                  const Locale.fromSubtags(
                     languageCode: 'uz',
                     countryCode: 'UZ',
                   ),
@@ -49,13 +51,14 @@ class LanguageBtmSheet extends StatelessWidget {
               },
               child: SizedBox(
                 height: 56.h,
-                child: Text('O\'zbekcha'),
+                child: const Text('O\'zbekcha'),
               ),
             ),
             InkWell(
               onTap: () {
+                Navigator.of(context).pop();
                 context.setLocale(
-                  Locale.fromSubtags(
+                  const Locale.fromSubtags(
                     languageCode: 'en',
                     countryCode: 'US',
                   ),

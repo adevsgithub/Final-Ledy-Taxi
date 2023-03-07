@@ -19,6 +19,5 @@ class ConfirOtpcodeEvent extends AuthEvent {
 
   const ConfirOtpcodeEvent(this.code, this.phoneNumber);
   @override
-  // TODO: implement props
   List<Object?> get props => [phoneNumber, code];
 }

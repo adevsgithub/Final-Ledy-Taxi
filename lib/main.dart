@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:final_ledy_taxi_app/service/privoder/theme_privoder.dart';
-import 'package:final_ledy_taxi_app/ui/pages/home/addres_page.dart';
+import 'package:final_ledy_taxi_app/ui/pages/pageView.dart';
+import 'package:final_ledy_taxi_app/ui/pages/registry/register_page_1.dart';
+import 'package:final_ledy_taxi_app/ui/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +17,6 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   final GetStorage box = GetStorage();
   bool showOnbaording = true;
-  // ignore: prefer_single_quotes
   if (await box.read("onboarding") != null) {
     showOnbaording = false;
   }
@@ -69,17 +70,19 @@ class MyApp extends StatelessWidget {
                 theme: state.isLight
                     ? ThemeProvider.lightThemeData
                     : ThemeProvider.darkThemeData,
-                // home: OnBoardingPage(),
+                home: OnBoardingPage(),
                 // home: RegisterPage1(title: ''),
-                // home: SplashPage(),
+                // home: const SplashPage(),
                 // home: EditProfile(),
                 // home: AlerDiolog(),
-                home: const AddresPage(),
+                // home: const AddresPage,),
                 // home: SettingsPage(),
                 // home: AddresPage(),
                 // home: (showOnboarding ?? true)
                 //     ? OnBoardingPage()
-                //     : RegisterPage1()
+                //     : RegisterPage1(
+                //         title: '',
+                //       )
                 //   // SplashPage.routeName: (context) => const SplashPage(),
                 //   // OnBoardingPage.routeName: (context) => const OnBoardingPage()
                 //   // // Onboarding2.routeName: (context) => const Onboarding2(),

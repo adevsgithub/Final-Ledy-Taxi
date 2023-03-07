@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/button/elevetd_btm.dart';
@@ -8,19 +9,19 @@ import 'bottom_sheet/lang_btm_sheet.dart';
 import 'registry/register_page_1.dart';
 
 class OnBoardingPage extends StatefulWidget {
-  const OnBoardingPage({super.key});
-
+  OnBoardingPage({super.key});
   static const routeName = '/onBoardingPage';
   static int activindex = 0;
-
+  final box = GetStorage();
   @override
   State<OnBoardingPage> createState() => _OnBoardingPageState();
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final controller = PageController(viewportFraction: 0.8, keepPage: false);
-
   int acTiveIndex = 0;
+  final GetStorage box = GetStorage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +37,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   padding:
                       EdgeInsets.symmetric(vertical: 20.h, horizontal: 6.w),
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      box.write("onboarding", true);
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) {
                           return RegisterPage1(title: 'Title');
@@ -65,10 +67,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   acTiveIndex = index;
                   setState(() {});
                 },
-                children: [
-                  const ViewPage1(),
-                  const ViewPage2(),
-                  const ViewPage3(),
+                children: const [
+                  ViewPage1(),
+                  ViewPage2(),
+                  ViewPage3(),
                 ],
               ),
             ),
@@ -90,8 +92,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: ElevetedBtn(
-                onPressed: () {
+                onPressed: () async {
                   if (acTiveIndex == 2) {
+                    await box.write("onboarding", true);
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) {
                         return RegisterPage1(title: 'Title');
@@ -100,17 +103,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     );
                   } else {
                     controller.nextPage(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.fastOutSlowIn);
                   }
                 },
-                title: 'Next',
+                title: acTiveIndex == 2 ? "Start" : 'Next',
               ),
             ),
             GestureDetector(
               onTap: () {
                 showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Colors.white,
                     context: context,
                     builder: (context) {
                       return const LanguageBtmSheet();
@@ -128,11 +131,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20, left: 20),
-                      child: Image.asset(
-                        'assets/images/Purpl_ic.png',
-                        width: 30.w,
+                    const Padding(
+                      padding: EdgeInsets.only(right: 30, left: 30),
+                      child: Icon(
+                        Icons.language,
+                        size: 32,
                       ),
                     ),
                     Expanded(
@@ -140,21 +143,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'lang'.tr(),
+                            'Til'.tr(),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             height: 6.h,
                           ),
                           Text(
-                              '${'currentLang'.tr()} ${'currentLangTitle'.tr()}}')
+                              '${'Hozirgi til'.tr()} ${'currentLangTitle'.tr()}}')
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.navigate_next_rounded),
-                    )
                   ],
                 ),
               ),

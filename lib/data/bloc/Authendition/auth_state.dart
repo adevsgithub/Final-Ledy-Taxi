@@ -11,7 +11,7 @@ class AuthInitial extends AuthState {
 
 class AuthErrorState extends AuthState {
   final DioError error;
-  AuthErrorState(this.error);
+  const AuthErrorState(this.error);
   @override
   List<Object?> get props => [error];
 }

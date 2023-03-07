@@ -69,6 +69,9 @@ class _RegisterPage2State extends State<RegisterPage2> {
         },
         child: Column(
           children: [
+            SizedBox(
+              height: 20.h,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -106,7 +109,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 );
               },
             ),
-            SizedBox(height: 200.h),
+            SizedBox(height: 100.h),
             OTPTextField(
               controller: _controller,
               otpFieldStyle: OtpFieldStyle(
@@ -135,8 +138,9 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 ),
               ),
             ),
+            Spacer(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: ElevatedButton(
                 onPressed: () {
                   context
@@ -144,7 +148,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       .add(ConfirOtpcodeEvent(_userCode, widget.userNumber));
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(3400, 47),
+                  minimumSize: const Size(3400, 50),
                   backgroundColor: AppColors.primaryClr,
                   disabledBackgroundColor:
                       AppColors.primaryClr.withOpacity(0.1),
@@ -162,6 +166,9 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 child: Text('Continue'),
               ),
             ),
+            SizedBox(
+              height: 40.h,
+            )
           ],
         ),
       ),

@@ -12,8 +12,8 @@ import '../../showAlerDialog/aler_diolog.dart';
 import 'drower/myDrower.dart';
 
 class AddresPage extends StatefulWidget {
-  const AddresPage({super.key});
-
+  const AddresPage({super.key, required this.myNumber});
+  final String myNumber;
   @override
   State<AddresPage> createState() => _AddresPageState();
 }
@@ -56,7 +56,9 @@ class _AddresPageState extends State<AddresPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrower(),
+      drawer: MyDrower(
+        userNum: widget.myNumber,
+      ),
       body: Builder(builder: (context) {
         return Stack(
           children: [

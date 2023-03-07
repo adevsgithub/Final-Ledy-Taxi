@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/ui/pages/bottom_sheet/exit_bottom_shett.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,8 @@ import '../../history/appsettings_page.dart';
 import '../../profile/edit_profile.dart';
 
 class MyDrower extends StatelessWidget {
-  const MyDrower({super.key});
+  MyDrower({super.key, required this.userNum});
+  final String userNum;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class MyDrower extends StatelessWidget {
                   height: 4.h,
                 ),
                 Text(
-                  '    +998991234567',
+                  '   +${userNum}',
                   style: TextStyle(fontSize: 12, color: AppColors.whiteClr),
                 ),
                 SizedBox(
@@ -88,7 +90,7 @@ class MyDrower extends StatelessWidget {
                       builder: (context) => EditProfile(),
                     ),
                   ),
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.history,
                     size: 30,
                   ),
@@ -100,7 +102,7 @@ class MyDrower extends StatelessWidget {
                       builder: (context) => SettingsPage(),
                     ),
                   ),
-                  leading: Icon(
+                  leading: const Icon(
                     size: 30,
                     Icons.settings,
                   ),
@@ -108,11 +110,18 @@ class MyDrower extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    showCupertinoModalPopup(
+                    showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
                         context: context,
-                        builder: (BuildContext context) => logOutIosDialog());
+                        builder: (context) {
+                          return ExitBottomSheet();
+                        });
+                    // showCupertinoModalPopup(
+                    //     context: context,
+                    //     builder: (BuildContext context) =>
+                    //         const logOutIosDialog());
                   },
-                  leading: Icon(
+                  leading: const Icon(
                     size: 30,
                     Icons.logout,
                   ),

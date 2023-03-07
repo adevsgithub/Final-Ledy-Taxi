@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class ThemeProvider {
   static final lightThemeData = ThemeData(
-    colorScheme: ColorScheme.light(background: AppColors.whiteClr),
+    colorScheme: const ColorScheme.light(background: AppColors.whiteClr),
   );
   static final darkThemeData = ThemeData(
-    colorScheme: ColorScheme.dark(background: AppColors.blcColor),
+    colorScheme: const ColorScheme.dark(background: AppColors.blcColor),
   );
 }
