@@ -10,14 +10,10 @@ class LanguageBtmSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 16),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            16,
-          ),
-          topRight: Radius.circular(
-            16,
-          ),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
       ),
       child: SafeArea(

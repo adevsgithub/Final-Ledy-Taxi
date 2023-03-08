@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/ui/pages/bottom_sheet/lang_btm_sheet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,9 +71,55 @@ class SettingsPage extends StatelessWidget {
                   onPressed: () {},
                   title: 'Xavsizlik'.tr(),
                 ),
-                conteinerSettings(
-                  onPressed: () {},
-                  title: 'Til'.tr(),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (context) {
+                          return const LanguageBtmSheet();
+                        });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      // border: Border.all(width: 0), // Set border width
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)), //
+                      color: Color(
+                        0xFFF6F6F6,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(right: 30, left: 30),
+                          child: Icon(
+                            Icons.language,
+                            size: 32,
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Til'.tr(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 6.h,
+                              ),
+                              Text(
+                                  '${'Hozirgi til'.tr()} ${'currentLangTitle'.tr()}}')
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {},

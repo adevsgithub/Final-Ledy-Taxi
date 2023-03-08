@@ -19,18 +19,18 @@ class RegisterPage2 extends StatefulWidget {
 }
 
 class _RegisterPage2State extends State<RegisterPage2> {
-  // final TextEditingController __controller = TextEditingController();
   final OtpFieldController _controller = OtpFieldController();
   String _userCode = '';
+  bool btnEnabled = false;
+  bool txtBtnEnable = false;
 
   int num = 4;
-  // final minutes  = strDigits(myDuration.inMinutes.remainder(60));
 
   final CountdownController _controllerseconds = CountdownController(
     autoStart: true,
   );
 
-  int myDuration = 120;
+  int myDuration = 119;
 
   formatDuration(int duration) {
     var a = [
@@ -47,12 +47,19 @@ class _RegisterPage2State extends State<RegisterPage2> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           'Ro\'yhatdan o\'tish',
           style: TextStyle(
             color: AppColors.blcColor,
             fontSize: 22,
             fontWeight: FontWeight.w600,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.blcColor,
           ),
         ),
       ),
@@ -65,7 +72,15 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         myNumber: widget.userNumber,
                       )),
             );
-          } else if (state is AuthErrorState) {}
+          } else if (state is AuthErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(' Kodni not\'o\'gri kiritdingiz'),
+                // backgroundColor: Colors.blueGrey,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
         },
         child: Column(
           children: [
@@ -75,34 +90,37 @@ class _RegisterPage2State extends State<RegisterPage2> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Tasdiqlash kodi ',
                   style: TextStyle(fontSize: 18),
                 ),
                 Text(
                   '+${widget.userNumber}',
-                  style: TextStyle(fontSize: 18, color: AppColors.primaryClr),
+                  style: const TextStyle(
+                      fontSize: 18, color: AppColors.primaryClr),
                 ),
               ],
             ),
             SizedBox(height: 6.h),
             Text(
               'raqamiga yuborildi.'.tr(),
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             SizedBox(height: 6.h),
             Text(
               'Qabul qilish vaqti:'.tr(),
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             SizedBox(height: 10.h),
             Countdown(
               controller: _controllerseconds,
               seconds: myDuration,
-              build: (_, double time) {
+              build: (_, time) {
+                if (time < 1) txtBtnEnable = true;
+                print(txtBtnEnable);
                 return Text(
                   formatDuration(time.toInt()),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: AppColors.primaryClr,
                   ),
@@ -122,23 +140,30 @@ class _RegisterPage2State extends State<RegisterPage2> {
               fieldWidth: 64.w,
               fieldStyle: FieldStyle.box,
               outlineBorderRadius: 12,
-              style: TextStyle(fontSize: 17),
-              onChanged: (value) => setState(() {}),
-              onCompleted: (value) {
+              style: const TextStyle(fontSize: 17),
+              onChanged: (value) {
                 _userCode = value;
+                if (_userCode.length == 4) btnEnabled = true;
+                if (_userCode.length != 4) btnEnabled = false;
+                setState(() {});
               },
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'Kod qayta yuborilsin',
-                style: TextStyle(
-                  color: AppColors.txtColor,
-                  decoration: TextDecoration.underline,
+            if (txtBtnEnable)
+              TextButton(
+                onPressed: () {
+                  context
+                      .read<AuthBloc>()
+                      .add(SendOtpCodeEvent(widget.userNumber));
+                },
+                child: const Text(
+                  'Kod qayta yuborilsin',
+                  style: TextStyle(
+                    color: AppColors.txtColor,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
-            ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: ElevatedButton(
@@ -163,7 +188,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                     ),
                   ),
                 ),
-                child: Text('Continue'),
+                child: const Text('Continue'),
               ),
             ),
             SizedBox(

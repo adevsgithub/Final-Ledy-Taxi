@@ -29,6 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         } on DioError catch (e) {
           emit(AuthErrorState(e));
         }
+        on<CreateProfileEvent>(
+          (event, emit) async {
+            try {
+              final UserInfoModel response = await _repository.createUser();
+            } on DioError catch (e) {
+              emit(AuthErrorState(e));
+            }
+          },
+        );
       },
     );
   }

@@ -48,6 +48,13 @@ class _RegisterPage1State extends State<RegisterPage1> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.arrow_back_ios_new,
+                    ),
+                  ),
+                  Spacer(),
                   Text(
                     'Ro\'yhatdan o\'tish',
                     style: TextStyle(
@@ -56,6 +63,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  Spacer(),
                 ],
               ),
               SizedBox(
@@ -126,14 +134,14 @@ class _RegisterPage1State extends State<RegisterPage1> {
                               // ignore: prefer_const_constructors
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Color(0xFFF0F0F0),
-                                enabledBorder: OutlineInputBorder(
+                                fillColor: const Color(0xFFF0F0F0),
+                                enabledBorder: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFAFAFA)),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFEFEFEF)),
                                   borderRadius:

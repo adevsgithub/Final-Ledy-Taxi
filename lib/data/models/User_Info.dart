@@ -8,7 +8,6 @@ class UserInfoModel {
   UserInfoModel({
     required this.accessToken,
     required this.createdAt,
-    required this.deletedAt,
     required this.fullName,
     required this.gender,
     required this.id,
@@ -20,7 +19,6 @@ class UserInfoModel {
 
   String accessToken;
   String createdAt;
-  String deletedAt;
   String fullName;
   String gender;
   String id;
@@ -32,7 +30,6 @@ class UserInfoModel {
   factory UserInfoModel.fromJson(Map<String, dynamic> json) => UserInfoModel(
         accessToken: json["access_token"],
         createdAt: json["created_at"],
-        deletedAt: json["deleted_at"],
         fullName: json["full_name"],
         gender: json["gender"],
         id: json["id"],
@@ -45,7 +42,6 @@ class UserInfoModel {
   Map<String, dynamic> toJson() => {
         "access_token": accessToken,
         "created_at": createdAt,
-        "deleted_at": deletedAt,
         "full_name": fullName,
         "gender": gender,
         "id": id,

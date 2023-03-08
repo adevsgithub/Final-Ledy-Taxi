@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart' show BaseOptions, Dio, Response;
+import 'package:dio/dio.dart' show BaseOptions, Dio, Options, Response;
 
 import '../utils/constants/constants.dart';
 
@@ -17,10 +17,11 @@ class ApiRequest {
 
   Future<Response> doPostRequest(
       {required String path,
+      Map<String, dynamic>? headrs,
       Map<String, dynamic>? body,
       Map<String, dynamic>? qury}) async {
-    final Response response =
-        await dio.post(path, data: body, queryParameters: qury);
+    final Response response = await dio.post(path,
+        data: body, queryParameters: qury, options: Options(headers: headrs));
 
     return response;
   }

@@ -46,6 +46,8 @@ dependencies:
   timer_count_down: ^2.2.2
   equatable: ^2.0.5
   dio: ^5.0.1
+  dropdown_button2: ^2.0.0
+  shared_preferences: ^2.0.18
 
 
 dev_dependencies:

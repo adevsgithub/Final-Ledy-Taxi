@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:final_ledy_taxi_app/ui/pages/home/slidinAppPanels/location_search_panel.dart';
 import 'package:final_ledy_taxi_app/ui/pages/home/slidinAppPanels/panal_location.dart';
 import 'package:final_ledy_taxi_app/ui/pages/home/slidinAppPanels/user_lc_panel.dart';
