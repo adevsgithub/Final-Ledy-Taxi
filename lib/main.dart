@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/data/bloc/get%20user%20bloc/get_user_bloc.dart';
 import 'package:final_ledy_taxi_app/service/privoder/theme_privoder.dart';
 import 'package:final_ledy_taxi_app/ui/pages/pageView.dart';
 import 'package:final_ledy_taxi_app/ui/pages/registry/register_page_1.dart';
@@ -57,6 +58,9 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<AppSettingsCubit>(
               create: (BuildContext context) => AppSettingsCubit(),
+            ),
+            BlocProvider<GetUserBloc>(
+              create: (BuildContext context) => GetUserBloc()..add(GetUserEvent()),
             ),
           ],
           child: BlocBuilder<AppSettingsCubit, AppSettingsState>(

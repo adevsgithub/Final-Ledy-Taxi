@@ -27,15 +27,15 @@ class AuthRepository {
   Future<UserInfoModel> createUser() async {
     var prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Project.accessToken)!;
+    String name = prefs.getString(Project.name)!;
+    String gender = prefs.getString(Project.gender)!;
 
     final Response response = await ApiRequest().doPostRequest(
       path: "/v1/user/register",
-      headrs: {
-        'Authorization': 'Berer $token',
-      },
+      headrs: {'Authorization': token},
       body: {
-        'full_name': 'madina',
-        'gender': 'female',
+        'full_name': name,
+        'gender': gender,
       },
     );
 

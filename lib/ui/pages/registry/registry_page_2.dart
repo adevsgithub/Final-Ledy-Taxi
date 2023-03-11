@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/ui/pages/home/addres_page.dart';
 import 'package:final_ledy_taxi_app/ui/pages/profile/create_profile_page.dart';
 import 'package:final_ledy_taxi_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import '../../../data/bloc/Authendition/auth_bloc.dart';
@@ -33,10 +35,9 @@ class _RegisterPage2State extends State<RegisterPage2> {
   int myDuration = 119;
 
   formatDuration(int duration) {
-    var a = [
-      Duration(seconds: duration).inMinutes,
-      Duration(seconds: duration).inSeconds
-    ].map((e) => e.remainder(60).toString().padLeft(2, '0')).join(':');
+    var a = [Duration(seconds: duration).inMinutes, Duration(seconds: duration).inSeconds]
+        .map((e) => e.remainder(60).toString().padLeft(2, '0'))
+        .join(':');
     return a;
   }
 
@@ -57,21 +58,23 @@ class _RegisterPage2State extends State<RegisterPage2> {
         ),
         leading: IconButton(
           onPressed: () {},
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new,
             color: AppColors.blcColor,
           ),
         ),
       ),
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) async {
+          if (state is CreateUserSuccessState) {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => AddresPage(myNumber: widget.userNumber)));
+          }
           if (state is VeriyOtpCodeSuccesState) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => CreateProfilePage(
-                        myNumber: widget.userNumber,
-                      )),
-            );
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => CreateProfilePage(myNumber: widget.userNumber)));
+            var prefs = await SharedPreferences.getInstance();
+            prefs.setString('token', state.userInfo.accessToken);
           } else if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -82,7 +85,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
             );
           }
         },
-        child: Column(
+        builder: (context, state) => Column(
           children: [
             SizedBox(
               height: 20.h,
@@ -96,8 +99,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 ),
                 Text(
                   '+${widget.userNumber}',
-                  style: const TextStyle(
-                      fontSize: 18, color: AppColors.primaryClr),
+                  style: const TextStyle(fontSize: 18, color: AppColors.primaryClr),
                 ),
               ],
             ),
@@ -151,9 +153,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
             if (txtBtnEnable)
               TextButton(
                 onPressed: () {
-                  context
-                      .read<AuthBloc>()
-                      .add(SendOtpCodeEvent(widget.userNumber));
+                  context.read<AuthBloc>().add(SendOtpCodeEvent(widget.userNumber));
                 },
                 child: const Text(
                   'Kod qayta yuborilsin',
@@ -168,27 +168,18 @@ class _RegisterPage2State extends State<RegisterPage2> {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: ElevatedButton(
                 onPressed: () {
-                  context
-                      .read<AuthBloc>()
-                      .add(ConfirOtpcodeEvent(_userCode, widget.userNumber));
+                  context.read<AuthBloc>().add(ConfirOtpcodeEvent(_userCode, widget.userNumber));
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(3400, 50),
                   backgroundColor: AppColors.primaryClr,
-                  disabledBackgroundColor:
-                      AppColors.primaryClr.withOpacity(0.1),
-                  fixedSize: const Size(
-                    double.infinity,
-                    50,
-                  ),
+                  disabledBackgroundColor: AppColors.primaryClr.withOpacity(0.1),
+                  fixedSize: const Size(double.infinity, 50),
                   elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      30,
-                    ),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
-                child: const Text('Continue'),
+                child:
+                    state is AuthLoadingState ? CircularProgressIndicator(color: Colors.white) : const Text('Continue'),
               ),
             ),
             SizedBox(

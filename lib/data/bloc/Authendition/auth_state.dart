@@ -28,6 +28,15 @@ class VeriyOtpCodeSuccesState extends AuthState {
   const VeriyOtpCodeSuccesState(this.userInfo);
 
   @override
-  // TODO: implement props
   List<Object?> get props => [userInfo];
+}
+
+class CreateUserSuccessState extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthLoadingState extends AuthState {
+  @override
+  List<Object?> get props => [];
 }

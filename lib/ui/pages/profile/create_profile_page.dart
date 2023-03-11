@@ -1,25 +1,25 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:final_ledy_taxi_app/data/bloc/Authendition/auth_bloc.dart';
+import 'package:final_ledy_taxi_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/app_colors.dart';
 import '../home/addres_page.dart';
 
 class CreateProfilePage extends StatefulWidget {
-  CreateProfilePage({super.key, required this.myNumber});
+  const CreateProfilePage({super.key, required this.myNumber});
 
   final String myNumber;
-  String? selectedValue;
   @override
   State<CreateProfilePage> createState() => _CreateProfilePageState();
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
-  final AuthBloc _bloc = AuthBloc();
   final TextEditingController _controller = TextEditingController();
+  String selectedValue = 'ayol';
   @override
   void initState() {
     super.initState();
@@ -31,19 +31,15 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     return Scaffold(
       backgroundColor: AppColors.whiteClr,
       appBar: appBar(),
-      body: BlocListener<AuthBloc, AuthState>(
-        bloc: _bloc,
+      body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is CreateProfileEvent) {
             Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => AddresPage(
-                        myNumber: '',
-                      )),
+              MaterialPageRoute(builder: (context) => AddresPage(myNumber: '')),
             );
           }
         },
-        child: SingleChildScrollView(
+        builder: (context, state) => SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -58,7 +54,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   children: [
                     textForm1(),
                     SizedBox(height: 10.h),
-                    MyDorpDown(context),
+                    _myDropDown(context),
                     SizedBox(height: 16.h),
                     textForm3(),
                     SizedBox(height: 200.h),
@@ -67,24 +63,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       child: ElevatedButton(
                         onPressed: _controller.text.length == 13
                             ? () {
-                                context
-                                    .read<AuthBloc>()
-                                    .add(const CreateProfileEvent());
-                                // Navigator.of(context).pushAndRemoveUntil(
-                                //   MaterialPageRoute(builder: (context) {
-                                //     return AddresPage(
-                                //       myNumber: widget.myNumber,
-                                //     );
-                                //   }),
-                                //   (route) => false,
-                                // );
+                                context.read<AuthBloc>().add(const CreateProfileEvent());
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(3400, 47),
                           backgroundColor: AppColors.primaryClr,
-                          disabledBackgroundColor:
-                              AppColors.primaryClr.withOpacity(0.1),
+                          disabledBackgroundColor: AppColors.primaryClr.withOpacity(0.1),
                           fixedSize: const Size(
                             double.infinity,
                             50,
@@ -96,7 +81,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             ),
                           ),
                         ),
-                        child: Text('Continue'),
+                        child: state is AuthLoadingState
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text('Continue'),
                       ),
                     ),
                   ],
@@ -109,47 +96,44 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     );
   }
 
-  DropdownButton2<String> MyDorpDown(BuildContext context) {
-    return DropdownButton2(
-      hint: Text(
-        'Jinsi',
-        style: TextStyle(
-          fontSize: 14,
-          color: Theme.of(context).hintColor,
+  _myDropDown(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: DropdownButton(
+        underline: SizedBox(),
+        value: selectedValue,
+        isExpanded: true,
+        hint: Text(
+          'Jinsi',
+          style: TextStyle(fontSize: 14, color: Theme.of(context).hintColor),
         ),
-      ),
-      items: ['Erkak', 'Ayol']
-          .map((item) => DropdownMenuItem<String>(
-                value: item,
-                child: Text(
-                  item,
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ))
-          .toList(),
-      value: widget.selectedValue,
-      onChanged: (value) {
-        setState(() {
-          widget.selectedValue = value as String;
-        });
-      },
-      buttonStyleData: ButtonStyleData(
-        height: 50.h,
-        width: 360.w,
-      ),
-      menuItemStyleData: const MenuItemStyleData(
-        height: 40,
+        items: [
+          DropdownMenuItem(
+            value: 'ayol',
+            child: Text('Ayol', style: const TextStyle(fontSize: 14)),
+          ),
+          DropdownMenuItem(
+            value: 'erkak',
+            child: Text('Erkak', style: const TextStyle(fontSize: 14)),
+          ),
+        ],
+        onChanged: (value) async {
+          var prefs = await SharedPreferences.getInstance();
+          prefs.setString(Project.gender, value as String);
+          selectedValue = value;
+          setState(() {});
+        },
       ),
     );
   }
 
   TextField textForm3() {
     return TextField(
-      onChanged: (value) {
-        setState(() {});
-      },
       controller: _controller,
       inputFormatters: [LengthLimitingTextInputFormatter(13)],
       keyboardType: TextInputType.none,
@@ -193,9 +177,10 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   Widget textForm1() {
     return TextFormField(
       onChanged: (value) => setState(() {}),
-      onFieldSubmitted: (value) {},
-      // controller: _controller,
-      // inputFormatters: [LengthLimitingTextInputFormatter(13)],
+      onFieldSubmitted: (value) async {
+        var prefs = await SharedPreferences.getInstance();
+        prefs.setString(Project.name, value);
+      },
       keyboardType: TextInputType.name,
       decoration: const InputDecoration(
         hintText: 'F.I.Sh',
@@ -223,9 +208,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           decoration: const BoxDecoration(
             color: Color(0xFFF6F6F6),
             shape: BoxShape.circle,
-            image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/EditProfImg.png')),
+            image: DecorationImage(fit: BoxFit.cover, image: AssetImage('assets/images/EditProfImg.png')),
           ),
         ),
         Positioned(
@@ -235,9 +218,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
             height: 26.h,
             width: 26.w,
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.contain,
-                  image: AssetImage('assets/images/Purpl_ic.png')),
+              image: DecorationImage(fit: BoxFit.contain, image: AssetImage('assets/images/Purpl_ic.png')),
             ),
           ),
         ),
@@ -251,14 +232,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       backgroundColor: AppColors.whiteClr,
       title: Text(
         'Profil yaratish',
-        style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: AppColors.blcColor),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: AppColors.blcColor),
       ),
     );
   }
-  // _myFunction{
-  //       _bloc.add(SendOtpCodeEvent(_token));
-  // }
 }

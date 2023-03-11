@@ -11,9 +11,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _repository = AuthRepository();
   AuthBloc() : super(AuthInitial()) {
     on<SendOtpCodeEvent>((event, emit) async {
+      emit(AuthLoadingState());
       try {
-        final Response response =
-            await _repository.sendOtpCode(event.phoneNumber);
+        await _repository.sendOtpCode(event.phoneNumber);
         emit(const OtpCodeSentSuccessState());
       } on DioError catch (e) {
         emit(AuthErrorState(e));
@@ -22,17 +22,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<ConfirOtpcodeEvent>(
       (event, emit) async {
+        emit(AuthLoadingState());
         try {
-          final UserInfoModel response = await _repository.confirmOtpCode(
-              phoneNumber: event.phoneNumber, otpCode: event.code);
+          final UserInfoModel response =
+              await _repository.confirmOtpCode(phoneNumber: event.phoneNumber, otpCode: event.code);
           emit(VeriyOtpCodeSuccesState(response));
         } on DioError catch (e) {
           emit(AuthErrorState(e));
         }
+
         on<CreateProfileEvent>(
           (event, emit) async {
+            emit(AuthLoadingState());
             try {
-              final UserInfoModel response = await _repository.createUser();
+              await _repository.createUser();
+              emit(CreateUserSuccessState());
             } on DioError catch (e) {
               emit(AuthErrorState(e));
             }

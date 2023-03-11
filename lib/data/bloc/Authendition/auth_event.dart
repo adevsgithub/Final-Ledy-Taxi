@@ -10,7 +10,6 @@ class SendOtpCodeEvent extends AuthEvent {
 
   const SendOtpCodeEvent(this.phoneNumber);
   @override
-  // TODO: implement props
   List<Object?> get props => [phoneNumber];
 }
 

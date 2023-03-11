@@ -1,14 +1,14 @@
 import 'package:hive/hive.dart';
 
 class HiveServise {
-  static late final Box _userSettingsBox;
+  static late final Box token;
 
   // static Future<void> init() async {
   //   _userSettingsBox = await Hive.openBox(HiveBoxKeys.userSettins);
   // }
 
   static Future<int> clear() async {
-    return _userSettingsBox.clear();
+    return token.clear();
   }
 
   // static Future<bool> saveUserInfo(

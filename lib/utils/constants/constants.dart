@@ -3,5 +3,7 @@ class Config {
 }
 
 class Project {
-  static const accessToken = 'accessToken';
+  static const String accessToken = 'accessToken';
+  static const String name = 'name';
+  static const String gender = 'gender';
 }

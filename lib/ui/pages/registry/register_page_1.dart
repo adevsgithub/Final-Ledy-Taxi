@@ -7,7 +7,7 @@ import '../../../utils/app_colors.dart';
 import 'registry_page_2.dart';
 
 class RegisterPage1 extends StatefulWidget {
-  RegisterPage1({super.key, required this.title});
+  const RegisterPage1({super.key, required this.title});
   final String title;
 
   @override
@@ -18,7 +18,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
   final TextEditingController _controller = TextEditingController();
   String _userNumber = '';
   final AuthBloc _bloc = AuthBloc();
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -29,19 +29,19 @@ class _RegisterPage1State extends State<RegisterPage1> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocConsumer<AuthBloc, AuthState>(
         bloc: _bloc,
         listener: (context, state) {
+          setState(() {
+            isLoading = true;
+          });
           if (state is OtpCodeSentSuccessState) {
             Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => RegisterPage2(
-                        userNumber: _userNumber,
-                      )),
+              MaterialPageRoute(builder: (context) => RegisterPage2(userNumber: _userNumber)),
             );
           } else if (state is VeriyOtpCodeSuccesState) {}
         },
-        child: SafeArea(
+        builder: (context, state) => SafeArea(
           child: Column(
             children: [
               SizedBox(height: 30.h),
@@ -74,10 +74,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
                 children: [
                   Text(
                     'Ro’yxatdan o’tish uchun ',
-                    style: TextStyle(
-                        color: AppColors.blcColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400),
+                    style: TextStyle(color: AppColors.blcColor, fontSize: 16.sp, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -86,10 +83,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
                 children: [
                   Text(
                     'telefon raqamingizni kiriting',
-                    style: TextStyle(
-                        color: AppColors.blcColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400),
+                    style: TextStyle(color: AppColors.blcColor, fontSize: 16.sp, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -100,7 +94,6 @@ class _RegisterPage1State extends State<RegisterPage1> {
                 width: 360.w,
                 height: 86.h,
                 child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       width: 340.w,
@@ -127,25 +120,19 @@ class _RegisterPage1State extends State<RegisterPage1> {
                                 _userNumber = value;
                               },
                               controller: _controller,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(14)
-                              ],
+                              inputFormatters: [LengthLimitingTextInputFormatter(14)],
                               keyboardType: TextInputType.phone,
                               // ignore: prefer_const_constructors
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: const Color(0xFFF0F0F0),
                                 enabledBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFFAFAFA)),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
+                                  borderSide: BorderSide(color: Color(0xFFFAFAFA)),
+                                  borderRadius: BorderRadius.all(Radius.circular(12)),
                                 ),
                                 focusedBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFEFEFEF)),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
+                                  borderSide: BorderSide(color: Color(0xFFEFEFEF)),
+                                  borderRadius: BorderRadius.all(Radius.circular(12)),
                                 ),
                               ),
                             ),
@@ -167,20 +154,15 @@ class _RegisterPage1State extends State<RegisterPage1> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(3400, 47),
                     backgroundColor: AppColors.primaryClr,
-                    disabledBackgroundColor:
-                        AppColors.primaryClr.withOpacity(0.1),
+                    disabledBackgroundColor: AppColors.primaryClr.withOpacity(0.1),
                     fixedSize: const Size(
                       double.infinity,
                       50,
                     ),
                     elevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
-                  child: Text('Continue'),
+                  child: state is AuthLoadingState ? CircularProgressIndicator(color: Colors.white) : Text('Continue'),
                 ),
               ),
               Spacer(),

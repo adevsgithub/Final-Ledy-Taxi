@@ -9,9 +9,12 @@ class ApiRequest {
     sendTimeout: const Duration(seconds: 30),
   ));
 
-  Future<dynamic> doGetRequest(
-      {required String path, Map<String, dynamic>? query}) async {
-    final Response response = await dio.get(path, queryParameters: query);
+  Future<dynamic> doGetRequest({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? headers,
+  }) async {
+    final Response response = await dio.get(path, queryParameters: query, options: Options(headers: headers));
     return response;
   }
 
@@ -20,8 +23,8 @@ class ApiRequest {
       Map<String, dynamic>? headrs,
       Map<String, dynamic>? body,
       Map<String, dynamic>? qury}) async {
-    final Response response = await dio.post(path,
-        data: body, queryParameters: qury, options: Options(headers: headrs));
+    final Response response =
+        await dio.post(path, data: body, queryParameters: qury, options: Options(headers: headrs));
 
     return response;
   }
