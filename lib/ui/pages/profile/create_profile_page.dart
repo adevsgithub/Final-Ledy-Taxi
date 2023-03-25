@@ -32,11 +32,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       backgroundColor: AppColors.whiteClr,
       appBar: appBar(),
       body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is CreateProfileEvent) {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddresPage(myNumber: '')),
-            );
+        listener: (context, state) async {
+          if (state is CreateUserSuccessState) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddresPage(state.userInfoModel)));
+          } else if (state is AuthErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('${state.error.message}'),
+            ));
           }
         },
         builder: (context, state) => SingleChildScrollView(
@@ -62,24 +64,20 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: ElevatedButton(
                         onPressed: _controller.text.length == 13
-                            ? () {
-                                context.read<AuthBloc>().add(const CreateProfileEvent());
+                            ? () async {
+                                var prefs = await SharedPreferences.getInstance();
+                                var token = prefs.getString(Project.accessToken);
+                                if (1 == 1) {}
+                                context.read<AuthBloc>().add(CreateProfileEvent(token!));
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(3400, 47),
                           backgroundColor: AppColors.primaryClr,
                           disabledBackgroundColor: AppColors.primaryClr.withOpacity(0.1),
-                          fixedSize: const Size(
-                            double.infinity,
-                            50,
-                          ),
+                          fixedSize: const Size(double.infinity, 50),
                           elevation: 0.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              30,
-                            ),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         ),
                         child: state is AuthLoadingState
                             ? CircularProgressIndicator(color: Colors.white)

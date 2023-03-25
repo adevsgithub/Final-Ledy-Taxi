@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:dio/dio.dart' show BaseOptions, Dio, Options, Response;
 
 import '../utils/constants/constants.dart';

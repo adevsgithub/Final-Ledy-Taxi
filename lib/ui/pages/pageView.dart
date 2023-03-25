@@ -1,7 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/button/elevetd_btm.dart';
@@ -20,7 +24,11 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final controller = PageController(viewportFraction: 0.8, keepPage: false);
   int acTiveIndex = 0;
-  final GetStorage box = GetStorage();
+
+  _doNotOpen() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Project.isInitial, false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +42,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.h, horizontal: 6.w),
+                  padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 6.w),
                   child: TextButton(
                     onPressed: () async {
-                      box.write("onboarding", true);
+                      await _doNotOpen();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) {
-                          return RegisterPage1(title: 'Title');
+                          return RegisterPage1();
                         }),
                       );
                     },
@@ -49,9 +56,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       'skip'.tr(),
                       style: TextStyle(
                         fontSize: 16,
-                        color: OnBoardingPage.activindex.isEven
-                            ? AppColors.primaryClr
-                            : const Color(0xFFFFB7D4),
+                        color: OnBoardingPage.activindex.isEven ? AppColors.primaryClr : const Color(0xFFFFB7D4),
                       ),
                     ),
                   ),
@@ -94,17 +99,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               child: ElevetedBtn(
                 onPressed: () async {
                   if (acTiveIndex == 2) {
-                    await box.write("onboarding", true);
+                    await _doNotOpen();
+                    if (mounted) {}
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) {
-                        return RegisterPage1(title: 'Title');
+                        return RegisterPage1();
                       }),
                       (route) => false,
                     );
                   } else {
-                    controller.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.fastOutSlowIn);
+                    controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
                   }
                 },
                 title: acTiveIndex == 2 ? "Start" : 'Next',
@@ -149,8 +153,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           SizedBox(
                             height: 6.h,
                           ),
-                          Text(
-                              '${'Hozirgi til'.tr()} ${'currentLangTitle'.tr()}}')
+                          Text('${'Hozirgi til'.tr()} ${'currentLangTitle'.tr()}}')
                         ],
                       ),
                     ),

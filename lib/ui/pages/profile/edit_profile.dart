@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/data/models/User_Info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,8 @@ import '../../../utils/app_colors.dart';
 import '../../../utils/button/elevetd_btm.dart';
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+  const EditProfile(this.userInfo, {super.key});
+  final UserInfoModel userInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class EditProfile extends StatelessWidget {
           children: [
             SizedBox(height: 50.h),
             TextFormFieldw(
-              title: 'F.I.SH',
+              title: userInfo.fullName,
               icon: SvgPicture.asset(
                 'assets/icons/editpr_ic_2.svg',
                 fit: BoxFit.scaleDown,
@@ -32,7 +34,7 @@ class EditProfile extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             TextFormFieldw(
-              title: 'Telefon RaqamiH',
+              title: userInfo.phoneNumber,
               icon: null,
             ),
             SizedBox(height: 20.h),
@@ -66,6 +68,7 @@ class EditProfile extends StatelessWidget {
   AppBar appBar() {
     return AppBar(
       leading: IconButton(
+        color: AppColors.blcColor,
         icon: SvgPicture.asset(
           'assets/icons/ic_next.svg',
         ),
@@ -74,7 +77,7 @@ class EditProfile extends StatelessWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       title: Text(
-        'Profil sozlamalari',
+        'Profil sozlamalari'.tr(),
         style: TextStyle(
           color: AppColors.blcColor,
         ),
@@ -97,7 +100,7 @@ class TextFormFieldw extends StatelessWidget {
     return TextFormField(
       // controller: _controller,
       // inputFormatters: [LengthLimitingTextInputFormatter(13)],
-      keyboardType: TextInputType.phone,
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         hintText: title,
         suffixIcon: icon,

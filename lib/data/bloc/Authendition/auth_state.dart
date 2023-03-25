@@ -32,8 +32,11 @@ class VeriyOtpCodeSuccesState extends AuthState {
 }
 
 class CreateUserSuccessState extends AuthState {
+  final UserInfoModel userInfoModel;
+
+  const CreateUserSuccessState(this.userInfoModel);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [userInfoModel];
 }
 
 class AuthLoadingState extends AuthState {

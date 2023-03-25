@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:final_ledy_taxi_app/data/bloc/get%20user%20bloc/get_user_bloc.dart';
 import 'package:final_ledy_taxi_app/ui/pages/home/addres_page.dart';
 import 'package:final_ledy_taxi_app/ui/pages/profile/create_profile_page.dart';
 import 'package:final_ledy_taxi_app/utils/app_colors.dart';
@@ -66,20 +67,20 @@ class _RegisterPage2State extends State<RegisterPage2> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) async {
-          if (state is CreateUserSuccessState) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddresPage(myNumber: widget.userNumber)));
-          }
           if (state is VeriyOtpCodeSuccesState) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => CreateProfilePage(myNumber: widget.userNumber)));
-            var prefs = await SharedPreferences.getInstance();
-            prefs.setString('token', state.userInfo.accessToken);
+            if (state.userInfo.id.isNotEmpty) {
+              BlocProvider.of<GetUserBloc>(context).add(GetUserEvent());
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddresPage(state.userInfo)));
+            } else {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => CreateProfilePage(myNumber: widget.userNumber)));
+              var prefs = await SharedPreferences.getInstance();
+              prefs.setString('token', state.userInfo.accessToken!);
+            }
           } else if (state is AuthErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(' Kodni not\'o\'gri kiritdingiz'),
-                // backgroundColor: Colors.blueGrey,
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -119,7 +120,6 @@ class _RegisterPage2State extends State<RegisterPage2> {
               seconds: myDuration,
               build: (_, time) {
                 if (time < 1) txtBtnEnable = true;
-                print(txtBtnEnable);
                 return Text(
                   formatDuration(time.toInt()),
                   style: const TextStyle(

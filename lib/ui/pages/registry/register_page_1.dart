@@ -7,8 +7,7 @@ import '../../../utils/app_colors.dart';
 import 'registry_page_2.dart';
 
 class RegisterPage1 extends StatefulWidget {
-  const RegisterPage1({super.key, required this.title});
-  final String title;
+  const RegisterPage1({super.key});
 
   @override
   State<RegisterPage1> createState() => _RegisterPage1State();
@@ -17,8 +16,7 @@ class RegisterPage1 extends StatefulWidget {
 class _RegisterPage1State extends State<RegisterPage1> {
   final TextEditingController _controller = TextEditingController();
   String _userNumber = '';
-  final AuthBloc _bloc = AuthBloc();
-  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -30,18 +28,18 @@ class _RegisterPage1State extends State<RegisterPage1> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocConsumer<AuthBloc, AuthState>(
-        bloc: _bloc,
         listener: (context, state) {
-          setState(() {
-            isLoading = true;
-          });
           if (state is OtpCodeSentSuccessState) {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => RegisterPage2(userNumber: _userNumber)),
             );
-          } else if (state is VeriyOtpCodeSuccesState) {}
+          } else if (state is AuthErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('${state.error.message}'),
+            ));
+          }
         },
-        builder: (context, state) => SafeArea(
+        builder: (ctx, state) => SafeArea(
           child: Column(
             children: [
               SizedBox(height: 30.h),
@@ -49,7 +47,7 @@ class _RegisterPage1State extends State<RegisterPage1> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {},
                     icon: Icon(
                       Icons.arrow_back_ios_new,
                     ),
@@ -150,18 +148,20 @@ class _RegisterPage1State extends State<RegisterPage1> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ElevatedButton(
-                  onPressed: _controller.text.length == 14 ? _myFunction : null,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(3400, 47),
                     backgroundColor: AppColors.primaryClr,
                     disabledBackgroundColor: AppColors.primaryClr.withOpacity(0.1),
-                    fixedSize: const Size(
-                      double.infinity,
-                      50,
-                    ),
+                    fixedSize: const Size(double.infinity, 50),
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
+                  onPressed: _controller.text.length == 14
+                      ? () {
+                          _userNumber = _controller.text.replaceAll('+', '').replaceAll(' ', '');
+                          context.read<AuthBloc>().add(SendOtpCodeEvent(_userNumber));
+                        }
+                      : null,
                   child: state is AuthLoadingState ? CircularProgressIndicator(color: Colors.white) : Text('Continue'),
                 ),
               ),
@@ -171,10 +171,5 @@ class _RegisterPage1State extends State<RegisterPage1> {
         ),
       ),
     );
-  }
-
-  _myFunction() async {
-    _userNumber = _controller.text.replaceAll('+', '').replaceAll(' ', '');
-    _bloc.add(SendOtpCodeEvent(_userNumber));
   }
 }

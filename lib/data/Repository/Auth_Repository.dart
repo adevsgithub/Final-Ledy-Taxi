@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:dio/dio.dart';
 import 'package:final_ledy_taxi_app/utils/constants/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,8 +9,7 @@ import '../models/User_Info.dart';
 
 class AuthRepository {
   Future<Response> sendOtpCode(String phoneNumber) async {
-    final Response response =
-        await ApiRequest().doPostRequest(path: "/v1/user/login/$phoneNumber");
+    final Response response = await ApiRequest().doPostRequest(path: "/v1/user/login/$phoneNumber");
     return response;
   }
 
@@ -16,12 +17,11 @@ class AuthRepository {
     required String otpCode,
     required String phoneNumber,
   }) async {
-    final Response response = await ApiRequest()
-        .doGetRequest(path: "/v1/user/verify/$phoneNumber/$otpCode");
+    final Response response = await ApiRequest().doGetRequest(path: "/v1/user/verify/$phoneNumber/$otpCode");
     final result = UserInfoModel.fromJson(response.data);
     var prefs = await SharedPreferences.getInstance();
-    prefs.setString(Project.accessToken, result.accessToken);
-    return UserInfoModel.fromJson(response.data);
+    prefs.setString(Project.accessToken, result.accessToken!);
+    return result;
   }
 
   Future<UserInfoModel> createUser() async {
@@ -33,12 +33,18 @@ class AuthRepository {
     final Response response = await ApiRequest().doPostRequest(
       path: "/v1/user/register",
       headrs: {'Authorization': token},
-      body: {
-        'full_name': name,
-        'gender': gender,
-      },
+      body: {'full_name': name, 'gender': gender},
     );
+    token = UserInfoModel.fromJson(response.data).accessToken!;
+    prefs.setString(Project.accessToken, token);
 
     return UserInfoModel.fromJson(response.data);
+  }
+
+  Future<void> clear() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.remove(Project.accessToken);
+    prefs.remove(Project.name);
+    prefs.remove(Project.gender);
   }
 }

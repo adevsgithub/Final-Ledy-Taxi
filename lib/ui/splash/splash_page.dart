@@ -1,18 +1,22 @@
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:final_ledy_taxi_app/ui/pages/pageView.dart';
+import 'package:final_ledy_taxi_app/ui/splash/loading_screen.dart';
+import 'package:final_ledy_taxi_app/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
-
+class SplashPage extends StatelessWidget {
   static const routeName = '/';
+  const SplashPage({super.key});
 
-  @override
-  State<SplashPage> createState() => _SplashPageState();
-}
+  Future<Object> _isInitial() async {
+    var prefs = await SharedPreferences.getInstance();
+    var isInitial = prefs.getBool(Project.isInitial);
+    // prefs.clear();
+    return isInitial ?? true ? OnBoardingPage() : LoadingScreen();
+  }
 
-class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return EasySplashScreen(
@@ -23,8 +27,9 @@ class _SplashPageState extends State<SplashPage> {
         cacheWidth: 125,
       ),
       backgroundColor: Colors.white,
-      navigator: OnBoardingPage(),
-      durationInSeconds: 1,
+      futureNavigator: _isInitial(),
+      showLoader: false,
+      // durationInSeconds: 1,
     );
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:convert' show json;
 
 UserInfoModel userInfoModelFromJson(String str) =>
@@ -17,14 +19,14 @@ class UserInfoModel {
     required this.updatedAt,
   });
 
-  String accessToken;
+  String? accessToken;
   String createdAt;
   String fullName;
   String gender;
   String id;
-  bool isActive;
+  bool? isActive;
   String phoneNumber;
-  String refreshToken;
+  String? refreshToken;
   String updatedAt;
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) => UserInfoModel(

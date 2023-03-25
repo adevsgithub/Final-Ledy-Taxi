@@ -1,12 +1,15 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../utils/app_colors.dart';
 
 class LocationSerchPanalSc extends StatelessWidget {
-  const LocationSerchPanalSc({super.key, required this.controller});
+  const LocationSerchPanalSc({super.key, required this.controller, required this.funcBtn});
   final ScrollController controller;
+
+  final Function() funcBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -75,16 +78,22 @@ class LocationSerchPanalSc extends StatelessWidget {
   Row MyTextForm2() {
     return Row(
       children: [
-        Icon(
-          Icons.location_on_rounded,
-          color: AppColors.primaryClr,
-          size: 30.h,
+        IconButton(
+          icon: Icon(
+            Icons.location_on_rounded,
+            color: AppColors.primaryClr,
+            size: 30.h,
+          ),
+          onPressed: funcBtn,
         ),
         const Spacer(),
         SizedBox(
           height: 50.h,
           width: 340,
-          child: TextFormField(
+          child: TextField(
+            onSubmitted: (value) {
+              funcBtn();
+            },
             decoration: const InputDecoration(
               filled: true,
               // fillColor: const Color(0xFFF0F0F0),

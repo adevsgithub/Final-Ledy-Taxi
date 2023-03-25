@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../Repository/Auth_Repository.dart';
 import '../../models/User_Info.dart';
 part 'auth_state.dart';
@@ -35,13 +34,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           (event, emit) async {
             emit(AuthLoadingState());
             try {
-              await _repository.createUser();
-              emit(CreateUserSuccessState());
+              final UserInfoModel response = await _repository.createUser();
+              emit(CreateUserSuccessState(response));
             } on DioError catch (e) {
               emit(AuthErrorState(e));
             }
           },
         );
+
+        on<LogOutEvent>((event, emit) async {
+          await _repository.clear();
+          emit(AuthInitial());
+        });
       },
     );
   }

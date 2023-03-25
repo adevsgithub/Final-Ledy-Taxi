@@ -9,9 +9,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../data/bloc/app_settings/app_settings_cubit.dart';
 import '../../../utils/app_colors.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool natification = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,8 +118,7 @@ class SettingsPage extends StatelessWidget {
                               SizedBox(
                                 height: 6.h,
                               ),
-                              Text(
-                                  '${'Hozirgi til'.tr()} ${'currentLangTitle'.tr()}}')
+                              Text('${'Hozirgi til'.tr()} ${'currentLangTitle'.tr()}}')
                             ],
                           ),
                         ),
@@ -155,9 +160,10 @@ class SettingsPage extends StatelessWidget {
                             // activeTrackColor: AppColors.primaryClr,
                             inactiveThumbColor: AppColors.whiteClr,
                             inactiveTrackColor: AppColors.primaryClr,
-                            value: !state.isLight,
+                            value: natification,
                             onChanged: (bool value) {
-                              context.read<AppSettingsCubit>().changeThema();
+                              natification = value;
+                              setState(() {});
                             },
                           ),
                         ),

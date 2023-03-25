@@ -16,7 +16,7 @@ class GetUserErrorState extends UserState {
 }
 
 class GetUserSuccess extends UserState {
-  final ActiveUserInfo userInfo;
+  final UserInfoModel userInfo;
 
   GetUserSuccess(this.userInfo);
   @override
